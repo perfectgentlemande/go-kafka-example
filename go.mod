@@ -4,6 +4,7 @@ go 1.22.1
 
 require (
 	github.com/IBM/sarama v1.43.2
+	github.com/google/uuid v1.6.0
 	github.com/rs/zerolog v1.32.0
 )
 
