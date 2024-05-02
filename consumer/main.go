@@ -28,14 +28,14 @@ func main() {
 	responseChannels = make(map[string]chan *sarama.ConsumerMessage)
 
 	// Создание консьюмера Kafka
-	consumer, err := sarama.NewConsumer([]string{"kafka:9092"}, nil)
+	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, nil)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to create consumer")
 	}
 	defer consumer.Close()
 
 	// Подписка на партицию "pong" в Kafka
-	partConsumer, err := consumer.ConsumePartition("pong", 0, sarama.OffsetNewest)
+	partConsumer, err := consumer.ConsumePartition("ping", 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to consume partition")
 	}
