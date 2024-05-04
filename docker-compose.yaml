@@ -13,10 +13,11 @@ services:
       - zookeeper
     environment:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
     networks:
       - kafka-network
+    ports:
+      - 9092:9092
 
 networks:
   kafka-network:
-    driver: bridge
