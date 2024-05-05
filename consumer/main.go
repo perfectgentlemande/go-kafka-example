@@ -11,21 +11,10 @@ import (
 	"github.com/rs/zerolog"
 )
 
-type Message struct {
-	ID    string `json:"id"`
-	Value string `json:"value"`
-}
-
-// responseChannels - словарь для хранения каналов ответов, индексированных по ID запроса
-// mu - мьютекс для обеспечения синхронизации доступа к словарю responseChannels
-var responseChannels map[string]chan *sarama.ConsumerMessage
-var mu sync.Mutex
-
 func main() {
 	log := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	signalCtx, _ := signal.NotifyContext(context.Background(),
 		syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGKILL)
-	responseChannels = make(map[string]chan *sarama.ConsumerMessage)
 
 	// Создание консьюмера Kafka
 	consumer, err := sarama.NewConsumer([]string{"localhost:9092"}, nil)
@@ -51,11 +40,11 @@ func main() {
 		for {
 			select {
 			case <-signalCtx.Done():
-				log.Println("Context done, exiting goroutine")
+				log.Info().Msg("Context done, exiting goroutine")
 				return
 			case msg, ok := <-partConsumer.Messages():
 				if !ok {
-					log.Println("Channel closed, exiting goroutine")
+					log.Info().Msg("Channel closed, exiting goroutine")
 					return
 				}
 
